@@ -93,20 +93,75 @@ export function ChatIcon({ className }) {
   )
 }
 
-export function StatusBarGlyphs({ className }) {
+export function ProfileIcon({ className }) {
   return (
-    <svg viewBox="0 0 54 16" fill="none" className={className}>
-      <path d="M1 12h2v3H1v-3Zm4-3h2v6H5V9Zm4-3h2v9H9V6Zm4-4h2v13h-2V2Z" fill="currentColor" />
+    <svg viewBox="0 0 24 24" fill="none" className={className}>
+      <circle cx="12" cy="8" r="4" stroke="currentColor" strokeWidth="2" />
+      <path d="M4 20c1.5-4 4.5-6 8-6s6.5 2 8 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  )
+}
+
+export function BellIcon({ className }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" className={className}>
+      <path d="M6 10a6 6 0 1 1 12 0c0 4 1.5 5.5 1.5 5.5H4.5S6 14 6 10Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M10 19a2 2 0 0 0 4 0" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+    </svg>
+  )
+}
+
+export function ShieldIcon({ className }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" className={className}>
+      <path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M9 12l2 2 4-4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  )
+}
+
+export function HelpIcon({ className }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" className={className}>
+      <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="2" />
+      <path d="M9.5 9a2.5 2.5 0 1 1 3.5 2.3c-.8.4-1 .9-1 1.7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+      <circle cx="12" cy="17" r="0.9" fill="currentColor" />
+    </svg>
+  )
+}
+
+export function ChevronRightIcon({ className }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" className={className}>
+      <path d="M9 6l6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  )
+}
+
+export function SunIcon({ className }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" className={className}>
+      <circle cx="12" cy="12" r="4" stroke="currentColor" strokeWidth="2" />
       <path
-        d="M23 12.5c2.2-2 5.8-2 8 0M20.5 9.5c3.6-3.4 9.4-3.4 13 0M18 6.7c5-4.6 13-4.6 18 0"
+        d="M12 2.5v2M12 19.5v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2.5 12h2M19.5 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"
         stroke="currentColor"
-        strokeWidth="1.4"
+        strokeWidth="2"
         strokeLinecap="round"
       />
-      <circle cx="27" cy="14" r="1.2" fill="currentColor" />
-      <rect x="41" y="3" width="11" height="10" rx="2" stroke="currentColor" strokeWidth="1.3" />
-      <rect x="52.3" y="6.3" width="1.2" height="3.4" rx="0.5" fill="currentColor" />
-      <rect x="42.3" y="4.3" width="8.4" height="7.4" rx="1" fill="currentColor" />
+    </svg>
+  )
+}
+
+export function MoonIcon({ className }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" className={className}>
+      <path
+        d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5Z"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
     </svg>
   )
 }

@@ -5,11 +5,13 @@ import Cards from './components/screens/Cards'
 import History from './components/screens/History'
 import WhatsAppConnect from './components/screens/WhatsAppConnect'
 import Settings from './components/screens/Settings'
+import { useTheme } from './hooks/useTheme'
 
 export default function App() {
   const [tab, setTab] = useState('home')
   const [screen, setScreen] = useState('home')
   const [historySubTab, setHistorySubTab] = useState('online')
+  const [theme, setTheme] = useTheme()
 
   function handleTabChange(key) {
     setTab(key)
@@ -42,7 +44,7 @@ export default function App() {
       {screen === 'history' && (
         <History activeSubTab={historySubTab} onSubTabChange={setHistorySubTab} />
       )}
-      {screen === 'settings' && <Settings />}
+      {screen === 'settings' && <Settings theme={theme} onThemeChange={setTheme} />}
       {screen === 'connect' && <WhatsAppConnect onLink={handleLinkWhatsApp} />}
     </PhoneShell>
   )
