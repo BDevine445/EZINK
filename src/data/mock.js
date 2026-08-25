@@ -1,11 +1,13 @@
 export const onlineCard = {
   label: 'Online Purchases Visa',
   number: '1234  5678  9012  3456',
+  balance: '$482.10',
 }
 
 export const sendMoneyCard = {
   label: 'Send Money Visa',
   number: '9876  5432  2109  8765',
+  balance: '$120.00',
 }
 
 export const onlinePurchases = [
