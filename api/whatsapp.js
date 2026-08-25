@@ -7,8 +7,11 @@ const { MessagingResponse } = twilio.twiml
 // Catches receive / received / receives / receiving, plus the common
 // "recieve" misspelling of each.
 const RECEIVE_REGEX = /\brec(?:ei|ie)ve[ds]?\b|\brec(?:ei|ie)ving\b/i
+// Catches send / sends / sending / sent.
+const SEND_REGEX = /\bsend(?:s|ing)?\b|\bsent\b/i
 const AMOUNT_REGEX = /(\d[\d,]*(?:\.\d+)?)/
-const SENDER_REGEX = /from\s+([a-z][a-z\s]*)/i
+const FROM_REGEX = /from\s+([a-z][a-z\s]*)/i
+const TO_REGEX = /\bto\s+([a-z][a-z\s]*)/i
 
 function buildMenu() {
   return [
@@ -43,28 +46,64 @@ function buildHelp() {
     '- "history" — recent WhatsApp transactions',
     '- "menu" — show this menu again',
     '',
-    'You can also just tell me "I received Le 50 from John" and I\'ll add it to your Send Money balance.',
+    'You can also just tell me "I received Le 50 from John" or "send Le 50 to John" and I\'ll update your Send Money balance.',
   ].join('\n')
 }
 
+function extractAmount(rawBody) {
+  const match = rawBody.match(AMOUNT_REGEX)
+  return match ? parseFloat(match[1].replace(/,/g, '')) : null
+}
+
+function extractName(rawBody, regex) {
+  const match = rawBody.match(regex)
+  return match ? match[1].trim().replace(/[.!?]+$/, '') : null
+}
+
+function addTransaction(ledger, name) {
+  ledger.transactions.unshift({
+    name,
+    date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+  })
+}
+
 function handleReceive(ledger, rawBody) {
-  const amountMatch = rawBody.match(AMOUNT_REGEX)
-  if (!amountMatch) {
+  const amount = extractAmount(rawBody)
+  if (amount === null) {
     return "How much did you receive? Reply like \"received Le 50 from John\"."
   }
 
-  const amount = parseFloat(amountMatch[1].replace(/,/g, ''))
-  const senderMatch = rawBody.match(SENDER_REGEX)
-  const from = senderMatch ? senderMatch[1].trim().replace(/[.!?]+$/, '') : null
+  const from = extractName(rawBody, FROM_REGEX)
 
   ledger.balance += amount
-  ledger.transactions.unshift({
-    name: `Received ${formatLe(amount)}${from ? ` from ${from}` : ''}`,
-    date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
-  })
+  addTransaction(ledger, `Received ${formatLe(amount)}${from ? ` from ${from}` : ''}`)
 
   return [
     `✅ Got it — added ${formatLe(amount)} to your *${sendMoneyCard.label}*.`,
+    `New balance: ${formatLe(ledger.balance)}`,
+  ].join('\n')
+}
+
+function handleSend(ledger, rawBody) {
+  const amount = extractAmount(rawBody)
+  if (amount === null) {
+    return "How much do you want to send? Reply like \"send Le 50 to John\"."
+  }
+
+  if (amount > ledger.balance) {
+    return [
+      `❌ Not enough balance to send ${formatLe(amount)}.`,
+      `Your *${sendMoneyCard.label}* balance is ${formatLe(ledger.balance)}.`,
+    ].join('\n')
+  }
+
+  const to = extractName(rawBody, TO_REGEX)
+
+  ledger.balance -= amount
+  addTransaction(ledger, `Sent ${formatLe(amount)}${to ? ` to ${to}` : ''}`)
+
+  return [
+    `✅ Sent ${formatLe(amount)}${to ? ` to ${to}` : ''}.`,
     `New balance: ${formatLe(ledger.balance)}`,
   ].join('\n')
 }
@@ -80,6 +119,7 @@ function routeMessage(ledger, rawBody) {
   if (['hi', 'hello', 'hey', 'menu', 'start'].includes(lower)) return buildMenu()
 
   if (RECEIVE_REGEX.test(lower)) return handleReceive(ledger, text)
+  if (SEND_REGEX.test(lower)) return handleSend(ledger, text)
 
   return `Sorry, I didn't get that. 🤔\n\n${buildMenu()}`
 }
