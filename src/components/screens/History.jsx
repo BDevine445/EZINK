@@ -1,3 +1,5 @@
+import { ClockIcon } from '../icons'
+
 const AVATAR_GRADIENTS = [
   'from-blue-500 to-indigo-500',
   'from-fuchsia-500 to-violet-500',
@@ -53,6 +55,15 @@ export default function History({ activeSubTab, onSubTabChange, onlinePurchases,
           WhatsApp History
         </button>
       </div>
+
+      {!loading && items.length === 0 && (
+        <div className="flex flex-col items-center gap-3 py-16 text-center animate-fade-in-up" style={{ animationDelay: '100ms' }}>
+          <span className="flex h-12 w-12 items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800 text-slate-400 dark:text-slate-500">
+            <ClockIcon className="h-6 w-6" />
+          </span>
+          <p className="text-slate-400 dark:text-slate-500">No transactions yet.</p>
+        </div>
+      )}
 
       <ul className="flex flex-col gap-3">
         {loading && [0, 1, 2].map((i) => <RowSkeleton key={i} delay={100 + i * 60} />)}
