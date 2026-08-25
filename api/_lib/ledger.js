@@ -48,3 +48,30 @@ export async function saveLedger(ledger) {
   }
   await redis.set(LEDGER_KEY, ledger)
 }
+
+function addTransaction(ledger, name) {
+  const tx = {
+    name,
+    date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+  }
+  ledger.transactions.unshift(tx)
+  return tx
+}
+
+// Shared business rules, used by both the WhatsApp bot and the in-app
+// send-money form, so "insufficient funds" and transaction formatting
+// can't drift between the two entry points.
+export function applyReceive(ledger, amount, from) {
+  ledger.balance += amount
+  const transaction = addTransaction(ledger, `Received ${formatLe(amount)}${from ? ` from ${from}` : ''}`)
+  return { ok: true, transaction }
+}
+
+export function applySend(ledger, amount, to) {
+  if (amount > ledger.balance) {
+    return { ok: false, error: 'insufficient_funds' }
+  }
+  ledger.balance -= amount
+  const transaction = addTransaction(ledger, `Sent ${formatLe(amount)}${to ? ` to ${to}` : ''}`)
+  return { ok: true, transaction }
+}

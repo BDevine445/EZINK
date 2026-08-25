@@ -9,6 +9,7 @@ export default function VisaCard({
   secondaryLabel,
   secondaryIcon: SecondaryIcon = HistoryIcon,
   onSecondaryClick,
+  onSendClick,
   delay = 0,
 }) {
   const [pinVisible, setPinVisible] = useState(false)
@@ -60,6 +61,14 @@ export default function VisaCard({
           {secondaryLabel}
         </button>
       </div>
+      {onSendClick && (
+        <button
+          onClick={onSendClick}
+          className="mt-3 w-full rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-500 py-3 text-sm font-semibold text-white shadow-md shadow-teal-500/20 transition-all duration-200 hover:shadow-lg active:scale-[0.98]"
+        >
+          Send Money
+        </button>
+      )}
     </div>
   )
 }

@@ -7,6 +7,7 @@ import WhatsAppConnect from './components/screens/WhatsAppConnect'
 import Settings from './components/screens/Settings'
 import Placeholder from './components/screens/Placeholder'
 import TransactionDetail from './components/screens/TransactionDetail'
+import SendMoney from './components/screens/SendMoney'
 import { useTheme } from './hooks/useTheme'
 import { useAppState } from './hooks/useAppState'
 
@@ -51,6 +52,10 @@ export default function App() {
       setScreen('transaction')
       return
     }
+    if (target === 'send') {
+      setScreen('send')
+      return
+    }
     setTab(target)
     setScreen(target)
   }
@@ -86,6 +91,16 @@ export default function App() {
         <Settings theme={theme} onThemeChange={setTheme} onNavigate={handleNavigate} />
       )}
       {screen === 'connect' && <WhatsAppConnect />}
+      {screen === 'send' && (
+        <SendMoney
+          balance={sendMoneyCard.balance}
+          onBack={() => handleNavigate('cards')}
+          onSuccess={() => {
+            refresh()
+            handleNavigate('history', 'whatsapp')
+          }}
+        />
+      )}
       {screen === 'placeholder' && placeholder && (
         <Placeholder {...placeholder} onBack={() => handleNavigate('settings')} />
       )}

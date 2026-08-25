@@ -46,6 +46,7 @@ export default function Cards({ onNavigate, onlineCard, sendMoneyCard, loading }
             secondaryLabel="WhatsApp Transactions"
             secondaryIcon={ChatIcon}
             onSecondaryClick={() => onNavigate('history', 'whatsapp')}
+            onSendClick={() => onNavigate('send')}
             delay={160}
           />
         </>

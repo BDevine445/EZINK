@@ -1,6 +1,6 @@
 import twilio from 'twilio'
 import { onlineCard, sendMoneyCard, onlinePurchases } from '../src/data/mock.js'
-import { getLedger, saveLedger, formatLe } from './_lib/ledger.js'
+import { getLedger, saveLedger, formatLe, applyReceive, applySend } from './_lib/ledger.js'
 
 const { MessagingResponse } = twilio.twiml
 
@@ -60,13 +60,6 @@ function extractName(rawBody, regex) {
   return match ? match[1].trim().replace(/[.!?]+$/, '') : null
 }
 
-function addTransaction(ledger, name) {
-  ledger.transactions.unshift({
-    name,
-    date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
-  })
-}
-
 function handleReceive(ledger, rawBody) {
   const amount = extractAmount(rawBody)
   if (amount === null) {
@@ -74,9 +67,7 @@ function handleReceive(ledger, rawBody) {
   }
 
   const from = extractName(rawBody, FROM_REGEX)
-
-  ledger.balance += amount
-  addTransaction(ledger, `Received ${formatLe(amount)}${from ? ` from ${from}` : ''}`)
+  applyReceive(ledger, amount, from)
 
   return [
     `✅ Got it — added ${formatLe(amount)} to your *${sendMoneyCard.label}*.`,
@@ -90,17 +81,15 @@ function handleSend(ledger, rawBody) {
     return "How much do you want to send? Reply like \"send Le 50 to John\"."
   }
 
-  if (amount > ledger.balance) {
+  const to = extractName(rawBody, TO_REGEX)
+  const result = applySend(ledger, amount, to)
+
+  if (!result.ok) {
     return [
       `❌ Not enough balance to send ${formatLe(amount)}.`,
       `Your *${sendMoneyCard.label}* balance is ${formatLe(ledger.balance)}.`,
     ].join('\n')
   }
-
-  const to = extractName(rawBody, TO_REGEX)
-
-  ledger.balance -= amount
-  addTransaction(ledger, `Sent ${formatLe(amount)}${to ? ` to ${to}` : ''}`)
 
   return [
     `✅ Sent ${formatLe(amount)}${to ? ` to ${to}` : ''}.`,
