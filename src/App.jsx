@@ -6,6 +6,7 @@ import History from './components/screens/History'
 import WhatsAppConnect from './components/screens/WhatsAppConnect'
 import Settings from './components/screens/Settings'
 import Placeholder from './components/screens/Placeholder'
+import TransactionDetail from './components/screens/TransactionDetail'
 import { useTheme } from './hooks/useTheme'
 import { useAppState } from './hooks/useAppState'
 
@@ -14,6 +15,7 @@ export default function App() {
   const [screen, setScreen] = useState('home')
   const [historySubTab, setHistorySubTab] = useState('online')
   const [placeholder, setPlaceholder] = useState(null)
+  const [selectedTransaction, setSelectedTransaction] = useState(null)
   const [theme, setTheme] = useTheme()
   const { onlineCard, sendMoneyCard, onlinePurchases, whatsAppTransactions, loading, refresh } = useAppState()
 
@@ -44,6 +46,11 @@ export default function App() {
       setScreen('placeholder')
       return
     }
+    if (target === 'transaction') {
+      setSelectedTransaction(opts)
+      setScreen('transaction')
+      return
+    }
     setTab(target)
     setScreen(target)
   }
@@ -66,6 +73,13 @@ export default function App() {
           onlinePurchases={onlinePurchases}
           whatsAppTransactions={whatsAppTransactions}
           loading={loading}
+          onSelectTransaction={(tx) => handleNavigate('transaction', tx)}
+        />
+      )}
+      {screen === 'transaction' && selectedTransaction && (
+        <TransactionDetail
+          transaction={selectedTransaction}
+          onBack={() => handleNavigate('history', historySubTab)}
         />
       )}
       {screen === 'settings' && (

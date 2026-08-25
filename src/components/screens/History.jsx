@@ -22,7 +22,7 @@ function RowSkeleton({ delay }) {
   )
 }
 
-export default function History({ activeSubTab, onSubTabChange, onlinePurchases, whatsAppTransactions, loading }) {
+export default function History({ activeSubTab, onSubTabChange, onlinePurchases, whatsAppTransactions, loading, onSelectTransaction }) {
   const isOnline = activeSubTab === 'online'
   const items = isOnline ? onlinePurchases : whatsAppTransactions
 
@@ -68,23 +68,24 @@ export default function History({ activeSubTab, onSubTabChange, onlinePurchases,
       <ul className="flex flex-col gap-3">
         {loading && [0, 1, 2].map((i) => <RowSkeleton key={i} delay={100 + i * 60} />)}
         {!loading && items.map((tx, i) => (
-          <li
-            key={tx.name}
-            className="flex items-center gap-3 rounded-2xl border border-white/60 dark:border-slate-700/60 bg-white/80 dark:bg-slate-800/80 px-4 py-3 shadow-sm backdrop-blur-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md animate-fade-in-up"
-            style={{ animationDelay: `${100 + i * 60}ms` }}
-          >
-            <span
-              className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gradient-to-br text-white font-semibold ${
-                AVATAR_GRADIENTS[i % AVATAR_GRADIENTS.length]
-              }`}
+          <li key={tx.name} className="animate-fade-in-up" style={{ animationDelay: `${100 + i * 60}ms` }}>
+            <button
+              onClick={() => onSelectTransaction(tx)}
+              className="flex w-full items-center gap-3 rounded-2xl border border-white/60 dark:border-slate-700/60 bg-white/80 dark:bg-slate-800/80 px-4 py-3 text-left shadow-sm backdrop-blur-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md active:scale-[0.98]"
             >
-              {tx.name.charAt(0)}
-            </span>
-            <div className="min-w-0 flex-1">
-              <p className="truncate font-semibold text-slate-800 dark:text-slate-100">{tx.name}</p>
-              <p className="text-xs text-slate-400 dark:text-slate-500">{tx.date}</p>
-            </div>
-            {tx.amount && <span className="shrink-0 font-semibold text-slate-800 dark:text-slate-100">{tx.amount}</span>}
+              <span
+                className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gradient-to-br text-white font-semibold ${
+                  AVATAR_GRADIENTS[i % AVATAR_GRADIENTS.length]
+                }`}
+              >
+                {tx.name.charAt(0)}
+              </span>
+              <div className="min-w-0 flex-1">
+                <p className="truncate font-semibold text-slate-800 dark:text-slate-100">{tx.name}</p>
+                <p className="text-xs text-slate-400 dark:text-slate-500">{tx.date}</p>
+              </div>
+              {tx.amount && <span className="shrink-0 font-semibold text-slate-800 dark:text-slate-100">{tx.amount}</span>}
+            </button>
           </li>
         ))}
       </ul>
