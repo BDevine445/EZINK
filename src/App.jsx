@@ -5,6 +5,7 @@ import Cards from './components/screens/Cards'
 import History from './components/screens/History'
 import WhatsAppConnect from './components/screens/WhatsAppConnect'
 import Settings from './components/screens/Settings'
+import Placeholder from './components/screens/Placeholder'
 import { useTheme } from './hooks/useTheme'
 import { useAppState } from './hooks/useAppState'
 
@@ -12,6 +13,7 @@ export default function App() {
   const [tab, setTab] = useState('home')
   const [screen, setScreen] = useState('home')
   const [historySubTab, setHistorySubTab] = useState('online')
+  const [placeholder, setPlaceholder] = useState(null)
   const [theme, setTheme] = useTheme()
   const { onlineCard, sendMoneyCard, onlinePurchases, whatsAppTransactions, refresh } = useAppState()
 
@@ -37,6 +39,11 @@ export default function App() {
       setScreen('history')
       return
     }
+    if (target === 'placeholder') {
+      setPlaceholder(opts)
+      setScreen('placeholder')
+      return
+    }
     setTab(target)
     setScreen(target)
   }
@@ -55,8 +62,13 @@ export default function App() {
           whatsAppTransactions={whatsAppTransactions}
         />
       )}
-      {screen === 'settings' && <Settings theme={theme} onThemeChange={setTheme} />}
+      {screen === 'settings' && (
+        <Settings theme={theme} onThemeChange={setTheme} onNavigate={handleNavigate} />
+      )}
       {screen === 'connect' && <WhatsAppConnect />}
+      {screen === 'placeholder' && placeholder && (
+        <Placeholder {...placeholder} onBack={() => handleNavigate('settings')} />
+      )}
     </PhoneShell>
   )
 }

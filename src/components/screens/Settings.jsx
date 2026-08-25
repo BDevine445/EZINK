@@ -7,7 +7,7 @@ const ITEMS = [
   { label: 'Help & Support', Icon: HelpIcon, gradient: 'from-amber-400 to-orange-500' },
 ]
 
-export default function Settings({ theme, onThemeChange }) {
+export default function Settings({ theme, onThemeChange, onNavigate }) {
   const isDark = theme === 'dark'
 
   return (
@@ -52,6 +52,7 @@ export default function Settings({ theme, onThemeChange }) {
         {ITEMS.map(({ label, Icon, gradient }, i) => (
           <button
             key={label}
+            onClick={() => onNavigate('placeholder', { label, Icon, gradient })}
             className="flex items-center gap-3 rounded-2xl border border-white/60 dark:border-slate-700/60 bg-white/80 dark:bg-slate-800/80 px-4 py-4 text-left shadow-sm backdrop-blur-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md active:scale-[0.98] animate-fade-in-up"
             style={{ animationDelay: `${110 + i * 70}ms` }}
           >
