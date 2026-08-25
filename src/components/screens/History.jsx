@@ -1,5 +1,3 @@
-import { onlinePurchases, whatsAppTransactions } from '../../data/mock'
-
 const AVATAR_GRADIENTS = [
   'from-blue-500 to-indigo-500',
   'from-fuchsia-500 to-violet-500',
@@ -7,7 +5,7 @@ const AVATAR_GRADIENTS = [
   'from-amber-400 to-orange-500',
 ]
 
-export default function History({ activeSubTab, onSubTabChange }) {
+export default function History({ activeSubTab, onSubTabChange, onlinePurchases, whatsAppTransactions }) {
   const isOnline = activeSubTab === 'online'
   const items = isOnline ? onlinePurchases : whatsAppTransactions
 

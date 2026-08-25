@@ -6,7 +6,14 @@ const STEPS = [
   { Icon: ChatIcon, gradient: 'from-fuchsia-500 to-violet-500', text: 'Start Chatting with Our Bot!' },
 ]
 
-export default function WhatsAppConnect({ onLink }) {
+// Twilio's shared WhatsApp Sandbox number — same for every account testing
+// the sandbox. Override via env vars once you have a dedicated number.
+const WHATSAPP_NUMBER = import.meta.env.VITE_WHATSAPP_NUMBER || '14155238886'
+const WHATSAPP_PREFILL = import.meta.env.VITE_WHATSAPP_JOIN_CODE || 'Hi EZINK!'
+
+const WHATSAPP_LINK = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(WHATSAPP_PREFILL)}`
+
+export default function WhatsAppConnect() {
   return (
     <div className="pb-4">
       <h1 className="text-3xl font-bold text-slate-800 dark:text-white mb-1 animate-fade-in-up">Connect to WhatsApp</h1>
@@ -32,13 +39,15 @@ export default function WhatsAppConnect({ onLink }) {
         ))}
       </div>
 
-      <button
-        onClick={onLink}
-        className="w-full rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-500 py-4 font-semibold text-white shadow-lg shadow-teal-500/20 transition-all duration-300 hover:shadow-xl hover:shadow-teal-500/30 active:scale-[0.98] animate-fade-in-up"
+      <a
+        href={WHATSAPP_LINK}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="block w-full rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-500 py-4 text-center font-semibold text-white shadow-lg shadow-teal-500/20 transition-all duration-300 hover:shadow-xl hover:shadow-teal-500/30 active:scale-[0.98] animate-fade-in-up"
         style={{ animationDelay: '420ms' }}
       >
         Link WhatsApp
-      </button>
+      </a>
     </div>
   )
 }

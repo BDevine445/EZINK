@@ -1,8 +1,7 @@
 import VisaCard from '../VisaCard'
 import { HistoryIcon, ChatIcon } from '../icons'
-import { onlineCard, sendMoneyCard } from '../../data/mock'
 
-export default function Cards({ onNavigate }) {
+export default function Cards({ onNavigate, onlineCard, sendMoneyCard }) {
   return (
     <div className="pb-4">
       <h1 className="text-3xl font-bold text-slate-800 dark:text-white mb-6 animate-fade-in-up">Your EZINK Visa Cards</h1>
@@ -10,6 +9,7 @@ export default function Cards({ onNavigate }) {
       <VisaCard
         label={onlineCard.label}
         number={onlineCard.number}
+        balance={onlineCard.balance}
         gradientClass="from-blue-500 via-indigo-500 to-cyan-500"
         secondaryLabel="Online Transactions"
         secondaryIcon={HistoryIcon}
@@ -20,6 +20,7 @@ export default function Cards({ onNavigate }) {
       <VisaCard
         label={sendMoneyCard.label}
         number={sendMoneyCard.number}
+        balance={sendMoneyCard.balance}
         gradientClass="from-fuchsia-500 via-violet-500 to-indigo-600"
         secondaryLabel="WhatsApp Transactions"
         secondaryIcon={ChatIcon}

@@ -1,57 +1,14 @@
 import twilio from 'twilio'
-import { Redis } from '@upstash/redis'
-import { onlineCard, sendMoneyCard, onlinePurchases, whatsAppTransactions } from '../src/data/mock.js'
+import { onlineCard, sendMoneyCard, onlinePurchases } from '../src/data/mock.js'
+import { getLedger, saveLedger, formatLe } from './_lib/ledger.js'
 
 const { MessagingResponse } = twilio.twiml
-
-// Vercel's Upstash marketplace integration names these KV_REST_API_*;
-// a standalone Upstash project names them UPSTASH_REDIS_REST_*. Accept both.
-const REDIS_URL = process.env.KV_REST_API_URL || process.env.UPSTASH_REDIS_REST_URL
-const REDIS_TOKEN = process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN
-const redis = REDIS_URL && REDIS_TOKEN ? new Redis({ url: REDIS_URL, token: REDIS_TOKEN }) : null
 
 // Catches receive / received / receives / receiving, plus the common
 // "recieve" misspelling of each.
 const RECEIVE_REGEX = /\brec(?:ei|ie)ve[ds]?\b|\brec(?:ei|ie)ving\b/i
 const AMOUNT_REGEX = /(\d[\d,]*(?:\.\d+)?)/
 const SENDER_REGEX = /from\s+([a-z][a-z\s]*)/i
-
-function parseLe(value) {
-  return parseFloat(String(value).replace(/[^0-9.]/g, '')) || 0
-}
-
-function formatLe(amount) {
-  return `Le ${amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
-}
-
-// Falls back to a per-request in-memory ledger (seeded from mock data) if
-// Redis isn't configured yet, so the bot still works while storage is
-// being set up — it just won't remember anything between messages.
-const memoryLedgers = new Map()
-
-function freshLedger() {
-  return {
-    balance: parseLe(sendMoneyCard.balance),
-    transactions: [...whatsAppTransactions],
-  }
-}
-
-async function getLedger(sender) {
-  if (!redis) {
-    if (!memoryLedgers.has(sender)) memoryLedgers.set(sender, freshLedger())
-    return memoryLedgers.get(sender)
-  }
-  const existing = await redis.get(`ezink:ledger:${sender}`)
-  return existing || freshLedger()
-}
-
-async function saveLedger(sender, ledger) {
-  if (!redis) {
-    memoryLedgers.set(sender, ledger)
-    return
-  }
-  await redis.set(`ezink:ledger:${sender}`, ledger)
-}
 
 function buildMenu() {
   return [
@@ -144,10 +101,9 @@ export default async function handler(req, res) {
     }
   }
 
-  const sender = req.body?.From || 'anonymous'
-  const ledger = await getLedger(sender)
+  const ledger = await getLedger()
   const reply = routeMessage(ledger, req.body?.Body)
-  await saveLedger(sender, ledger)
+  await saveLedger(ledger)
 
   const twiml = new MessagingResponse()
   twiml.message(reply)

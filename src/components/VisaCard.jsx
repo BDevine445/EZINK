@@ -4,6 +4,7 @@ import { PinIcon, HistoryIcon } from './icons'
 export default function VisaCard({
   label,
   number,
+  balance,
   gradientClass,
   secondaryLabel,
   secondaryIcon: SecondaryIcon = HistoryIcon,
@@ -22,7 +23,10 @@ export default function VisaCard({
           <p className="font-semibold text-lg">{label}</p>
           <span className="h-7 w-9 rounded-md bg-white/25 backdrop-blur-sm" />
         </div>
-        <p className="relative text-xl tracking-[0.2em] font-medium mb-6">{number}</p>
+        <p className="relative text-xl tracking-[0.2em] font-medium mb-4">{number}</p>
+        {balance && (
+          <p className="relative text-2xl font-bold mb-4">{balance}</p>
+        )}
         <div className="relative flex items-end justify-between">
           <span className="text-xs uppercase tracking-wide text-white/80">
             {pinVisible ? 'PIN 4471' : 'See PIN'}
