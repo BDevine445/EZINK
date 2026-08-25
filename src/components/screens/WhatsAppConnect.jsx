@@ -9,7 +9,7 @@ const STEPS = [
 // Twilio's shared WhatsApp Sandbox number — same for every account testing
 // the sandbox. Override via env vars once you have a dedicated number.
 const WHATSAPP_NUMBER = import.meta.env.VITE_WHATSAPP_NUMBER || '14155238886'
-const WHATSAPP_PREFILL = import.meta.env.VITE_WHATSAPP_JOIN_CODE || 'Hi EZINK!'
+const WHATSAPP_PREFILL = import.meta.env.VITE_WHATSAPP_JOIN_CODE || 'join tongue-either'
 
 const WHATSAPP_LINK = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(WHATSAPP_PREFILL)}`
 
