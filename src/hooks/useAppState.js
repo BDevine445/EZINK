@@ -6,6 +6,7 @@ const FALLBACK_STATE = { onlineCard, sendMoneyCard, onlinePurchases, whatsAppTra
 export function useAppState() {
   const [state, setState] = useState(FALLBACK_STATE)
   const [loading, setLoading] = useState(true)
+  const [hasLoaded, setHasLoaded] = useState(false)
 
   const refresh = useCallback(() => {
     setLoading(true)
@@ -15,12 +16,17 @@ export function useAppState() {
       // /api isn't served by plain `vite dev` — keep the static mock data so
       // local UI work still has something to render.
       .catch(() => setState(FALLBACK_STATE))
-      .finally(() => setLoading(false))
+      .finally(() => {
+        setLoading(false)
+        setHasLoaded(true)
+      })
   }, [])
 
   useEffect(() => {
     refresh()
   }, [refresh])
 
-  return { ...state, loading, refresh }
+  // Only surface "loading" for the very first fetch — background refreshes
+  // (e.g. re-opening a tab) shouldn't flash a skeleton over real content.
+  return { ...state, loading: loading && !hasLoaded, refresh }
 }

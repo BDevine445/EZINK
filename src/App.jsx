@@ -15,7 +15,7 @@ export default function App() {
   const [historySubTab, setHistorySubTab] = useState('online')
   const [placeholder, setPlaceholder] = useState(null)
   const [theme, setTheme] = useTheme()
-  const { onlineCard, sendMoneyCard, onlinePurchases, whatsAppTransactions, refresh } = useAppState()
+  const { onlineCard, sendMoneyCard, onlinePurchases, whatsAppTransactions, loading, refresh } = useAppState()
 
   // Balances can change via the WhatsApp bot at any time, so re-fetch
   // whenever the user looks at a screen that shows them.
@@ -52,7 +52,12 @@ export default function App() {
     <PhoneShell activeTab={tab} onTabChange={handleTabChange}>
       {screen === 'home' && <Welcome onNavigate={handleNavigate} />}
       {screen === 'cards' && (
-        <Cards onNavigate={handleNavigate} onlineCard={onlineCard} sendMoneyCard={sendMoneyCard} />
+        <Cards
+          onNavigate={handleNavigate}
+          onlineCard={onlineCard}
+          sendMoneyCard={sendMoneyCard}
+          loading={loading}
+        />
       )}
       {screen === 'history' && (
         <History
@@ -60,6 +65,7 @@ export default function App() {
           onSubTabChange={setHistorySubTab}
           onlinePurchases={onlinePurchases}
           whatsAppTransactions={whatsAppTransactions}
+          loading={loading}
         />
       )}
       {screen === 'settings' && (

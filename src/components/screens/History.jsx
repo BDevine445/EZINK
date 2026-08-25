@@ -5,7 +5,22 @@ const AVATAR_GRADIENTS = [
   'from-amber-400 to-orange-500',
 ]
 
-export default function History({ activeSubTab, onSubTabChange, onlinePurchases, whatsAppTransactions }) {
+function RowSkeleton({ delay }) {
+  return (
+    <li
+      className="flex items-center gap-3 rounded-2xl border border-white/60 dark:border-slate-700/60 bg-white/80 dark:bg-slate-800/80 px-4 py-3 shadow-sm backdrop-blur-sm animate-pulse animate-fade-in-up"
+      style={{ animationDelay: `${delay}ms` }}
+    >
+      <span className="h-10 w-10 shrink-0 rounded-full bg-slate-200 dark:bg-slate-700" />
+      <div className="min-w-0 flex-1 flex flex-col gap-2">
+        <span className="h-3.5 w-2/3 rounded bg-slate-200 dark:bg-slate-700" />
+        <span className="h-2.5 w-1/3 rounded bg-slate-200 dark:bg-slate-700" />
+      </div>
+    </li>
+  )
+}
+
+export default function History({ activeSubTab, onSubTabChange, onlinePurchases, whatsAppTransactions, loading }) {
   const isOnline = activeSubTab === 'online'
   const items = isOnline ? onlinePurchases : whatsAppTransactions
 
@@ -40,7 +55,8 @@ export default function History({ activeSubTab, onSubTabChange, onlinePurchases,
       </div>
 
       <ul className="flex flex-col gap-3">
-        {items.map((tx, i) => (
+        {loading && [0, 1, 2].map((i) => <RowSkeleton key={i} delay={100 + i * 60} />)}
+        {!loading && items.map((tx, i) => (
           <li
             key={tx.name}
             className="flex items-center gap-3 rounded-2xl border border-white/60 dark:border-slate-700/60 bg-white/80 dark:bg-slate-800/80 px-4 py-3 shadow-sm backdrop-blur-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md animate-fade-in-up"
