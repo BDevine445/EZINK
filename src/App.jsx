@@ -5,6 +5,7 @@ import Cards from './components/screens/Cards'
 import History from './components/screens/History'
 import WhatsAppConnect from './components/screens/WhatsAppConnect'
 import Settings from './components/screens/Settings'
+import SecuritySettings from './components/screens/SecuritySettings'
 import Placeholder from './components/screens/Placeholder'
 import TransactionDetail from './components/screens/TransactionDetail'
 import SendMoney from './components/screens/SendMoney'
@@ -15,16 +16,18 @@ import { useTheme } from './hooks/useTheme'
 import { useAppState } from './hooks/useAppState'
 import { useAuth } from './hooks/useAuth'
 
-// Balances, card numbers, and transaction history are treated as sensitive:
-// entering this cluster requires a password re-check, which stays valid
-// while navigating within it but resets once the user leaves for Home/Settings.
-const SENSITIVE_SCREENS = ['cards', 'history', 'transaction', 'send']
+// Balances, card numbers, transaction history, and security settings are
+// treated as sensitive: entering this cluster requires a password re-check,
+// which stays valid while navigating within it but resets once the user
+// leaves for Home/Settings.
+const SENSITIVE_SCREENS = ['cards', 'history', 'transaction', 'send', 'security']
 
 export default function App() {
   const [tab, setTab] = useState('home')
   const [screen, setScreen] = useState('home')
   const [historySubTab, setHistorySubTab] = useState('online')
   const [placeholder, setPlaceholder] = useState(null)
+  const [placeholderOrigin, setPlaceholderOrigin] = useState('settings')
   const [selectedTransaction, setSelectedTransaction] = useState(null)
   const [theme, setTheme] = useTheme()
   const { onlineCard, sendMoneyCard, onlinePurchases, whatsAppTransactions, loading, refresh } = useAppState()
@@ -72,10 +75,16 @@ export default function App() {
       return
     }
     if (target === 'placeholder') {
+      const origin = screen
       goTo('placeholder', () => {
+        setPlaceholderOrigin(origin)
         setPlaceholder(opts)
         setScreen('placeholder')
       })
+      return
+    }
+    if (target === 'security') {
+      goTo('security', () => setScreen('security'))
       return
     }
     if (target === 'transaction') {
@@ -142,6 +151,9 @@ export default function App() {
         {screen === 'settings' && (
           <Settings theme={theme} onThemeChange={setTheme} onNavigate={handleNavigate} onLogout={handleLogout} />
         )}
+        {screen === 'security' && (
+          <SecuritySettings onNavigate={handleNavigate} onBack={() => handleNavigate('settings')} />
+        )}
         {screen === 'connect' && <WhatsAppConnect />}
         {screen === 'send' && (
           <SendMoney
@@ -154,7 +166,7 @@ export default function App() {
           />
         )}
         {screen === 'placeholder' && placeholder && (
-          <Placeholder {...placeholder} onBack={() => handleNavigate('settings')} />
+          <Placeholder {...placeholder} onBack={() => handleNavigate(placeholderOrigin)} />
         )}
       </PhoneShell>
 

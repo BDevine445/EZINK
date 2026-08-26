@@ -14,9 +14,11 @@ export default function VisaCard({
 }) {
   const [pinVisible, setPinVisible] = useState(false)
   const [numberVisible, setNumberVisible] = useState(false)
+  const [balanceVisible, setBalanceVisible] = useState(false)
 
   const groups = number.split(/\s+/).filter(Boolean)
   const maskedNumber = groups.map((g, i) => (i === groups.length - 1 ? g : '••••')).join('  ')
+  const maskedBalance = balance?.replace(/[0-9]/g, '•')
 
   return (
     <div className="mb-6 animate-fade-in-up" style={{ animationDelay: `${delay}ms` }}>
@@ -36,7 +38,13 @@ export default function VisaCard({
           {numberVisible ? number : maskedNumber}
         </button>
         {balance && (
-          <p className="relative text-2xl font-bold mb-4">{balance}</p>
+          <button
+            onClick={() => setBalanceVisible((v) => !v)}
+            aria-label={balanceVisible ? 'Hide balance' : 'Show balance'}
+            className="relative block text-left text-2xl font-bold mb-4"
+          >
+            {balanceVisible ? balance : maskedBalance}
+          </button>
         )}
         <div className="relative flex items-end justify-between">
           <span className="text-xs uppercase tracking-wide text-white/80">

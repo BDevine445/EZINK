@@ -23,11 +23,11 @@ export default function BottomNav({ activeTab, onTabChange }) {
                 <span className="absolute inset-0 animate-scale-in rounded-full bg-gradient-to-br from-indigo-600 to-blue-500 shadow-md shadow-indigo-500/40" />
               )}
               <Icon
-                className={`relative h-5 w-5 transition-colors duration-300 ${isActive ? 'text-white' : 'text-slate-400 dark:text-slate-500'}`}
+                className={`relative h-5 w-5 transition-colors duration-300 ${isActive ? 'text-white' : 'text-slate-500 dark:text-slate-300'}`}
               />
               <span
                 className={`relative text-[10px] transition-colors duration-300 ${
-                  isActive ? 'font-semibold text-white' : 'font-medium text-slate-400 dark:text-slate-500'
+                  isActive ? 'font-semibold text-white' : 'font-medium text-slate-500 dark:text-slate-300'
                 }`}
               >
                 {label}
