@@ -1,4 +1,4 @@
-import { ProfileIcon, BellIcon, ShieldIcon, HelpIcon, ChevronRightIcon, SunIcon, MoonIcon } from '../icons'
+import { ProfileIcon, BellIcon, ShieldIcon, HelpIcon, ChevronRightIcon, SunIcon, MoonIcon, LockIcon } from '../icons'
 
 const ITEMS = [
   { label: 'Profile', Icon: ProfileIcon, gradient: 'from-blue-500 to-indigo-500' },
@@ -7,7 +7,7 @@ const ITEMS = [
   { label: 'Help & Support', Icon: HelpIcon, gradient: 'from-amber-400 to-orange-500' },
 ]
 
-export default function Settings({ theme, onThemeChange, onNavigate }) {
+export default function Settings({ theme, onThemeChange, onNavigate, onLogout }) {
   const isDark = theme === 'dark'
 
   return (
@@ -63,6 +63,17 @@ export default function Settings({ theme, onThemeChange, onNavigate }) {
             <ChevronRightIcon className="h-4 w-4 text-slate-300 dark:text-slate-600" />
           </button>
         ))}
+
+        <button
+          onClick={onLogout}
+          className="flex items-center gap-3 rounded-2xl border border-rose-200/60 dark:border-rose-900/60 bg-white/80 dark:bg-slate-800/80 px-4 py-4 text-left shadow-sm backdrop-blur-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md active:scale-[0.98] animate-fade-in-up"
+          style={{ animationDelay: `${110 + ITEMS.length * 70}ms` }}
+        >
+          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-rose-500 to-red-500 text-white">
+            <LockIcon className="h-5 w-5" />
+          </span>
+          <span className="flex-1 font-semibold text-rose-600 dark:text-rose-400">Log out</span>
+        </button>
       </div>
     </div>
   )
