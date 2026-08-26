@@ -1,17 +1,21 @@
 import { HomeIcon, CardsIcon, HistoryIcon, SettingsIcon } from './icons'
+import { useTranslation } from '../i18n/LanguageContext'
 
 const TABS = [
-  { key: 'home', label: 'Home', Icon: HomeIcon },
-  { key: 'cards', label: 'Cards', Icon: CardsIcon },
-  { key: 'history', label: 'History', Icon: HistoryIcon },
-  { key: 'settings', label: 'Settings', Icon: SettingsIcon },
+  { key: 'home', Icon: HomeIcon },
+  { key: 'cards', Icon: CardsIcon },
+  { key: 'history', Icon: HistoryIcon },
+  { key: 'settings', Icon: SettingsIcon },
 ]
 
 export default function BottomNav({ activeTab, onTabChange }) {
+  const { t } = useTranslation()
+
   return (
     <div className="pointer-events-none fixed inset-x-0 bottom-0 z-20 flex justify-center px-4 pb-[calc(env(safe-area-inset-bottom)+1rem)]">
       <div className="pointer-events-auto flex items-center gap-1 rounded-full border border-white/70 dark:border-slate-700/70 bg-white/80 dark:bg-slate-900/80 p-1.5 shadow-xl shadow-indigo-900/10 dark:shadow-black/30 backdrop-blur-xl">
-        {TABS.map(({ key, label, Icon }) => {
+        {TABS.map(({ key, Icon }) => {
+          const label = t(`nav.${key}`)
           const isActive = activeTab === key
           return (
             <button

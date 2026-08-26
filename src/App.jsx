@@ -6,6 +6,10 @@ import History from './components/screens/History'
 import WhatsAppConnect from './components/screens/WhatsAppConnect'
 import Settings from './components/screens/Settings'
 import SecuritySettings from './components/screens/SecuritySettings'
+import LanguageSettings from './components/screens/LanguageSettings'
+import HelpSupport from './components/screens/HelpSupport'
+import ContactEzink from './components/screens/ContactEzink'
+import TermsPrivacy from './components/screens/TermsPrivacy'
 import Placeholder from './components/screens/Placeholder'
 import TransactionDetail from './components/screens/TransactionDetail'
 import SendMoney from './components/screens/SendMoney'
@@ -21,6 +25,10 @@ import { useAuth } from './hooks/useAuth'
 // which stays valid while navigating within it but resets once the user
 // leaves for Home/Settings.
 const SENSITIVE_SCREENS = ['cards', 'history', 'transaction', 'send', 'security']
+
+// Sub-screens reached from Settings that aren't bottom-nav tabs — navigating
+// to them should only change the current screen, not the active tab.
+const SETTINGS_SUBSCREENS = ['security', 'language', 'help', 'contact', 'terms']
 
 export default function App() {
   const [tab, setTab] = useState('home')
@@ -83,8 +91,8 @@ export default function App() {
       })
       return
     }
-    if (target === 'security') {
-      goTo('security', () => setScreen('security'))
+    if (SETTINGS_SUBSCREENS.includes(target)) {
+      goTo(target, () => setScreen(target))
       return
     }
     if (target === 'transaction') {
@@ -154,6 +162,10 @@ export default function App() {
         {screen === 'security' && (
           <SecuritySettings onNavigate={handleNavigate} onBack={() => handleNavigate('settings')} />
         )}
+        {screen === 'language' && <LanguageSettings onBack={() => handleNavigate('settings')} />}
+        {screen === 'help' && <HelpSupport onBack={() => handleNavigate('settings')} />}
+        {screen === 'contact' && <ContactEzink onBack={() => handleNavigate('settings')} />}
+        {screen === 'terms' && <TermsPrivacy onBack={() => handleNavigate('settings')} />}
         {screen === 'connect' && <WhatsAppConnect />}
         {screen === 'send' && (
           <SendMoney

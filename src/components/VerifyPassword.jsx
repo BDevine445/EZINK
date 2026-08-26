@@ -1,7 +1,9 @@
 import { useState } from 'react'
 import { EyeIcon, EyeOffIcon, LockIcon } from './icons'
+import { useTranslation } from '../i18n/LanguageContext'
 
 export default function VerifyPassword({ onVerify, onSuccess, onCancel }) {
+  const { t } = useTranslation()
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState('')
@@ -11,7 +13,7 @@ export default function VerifyPassword({ onVerify, onSuccess, onCancel }) {
     if (onVerify(password)) {
       onSuccess()
     } else {
-      setError('Incorrect password')
+      setError(t('verify.error'))
       setPassword('')
     }
   }
@@ -24,8 +26,8 @@ export default function VerifyPassword({ onVerify, onSuccess, onCancel }) {
             <LockIcon className="h-6 w-6" />
           </span>
           <div>
-            <h2 className="text-lg font-bold text-slate-800 dark:text-white">Confirm it&apos;s you</h2>
-            <p className="text-sm text-slate-500 dark:text-slate-400">Enter your password to view this sensitive info</p>
+            <h2 className="text-lg font-bold text-slate-800 dark:text-white">{t('verify.title')}</h2>
+            <p className="text-sm text-slate-500 dark:text-slate-400">{t('verify.subtitle')}</p>
           </div>
         </div>
 
@@ -35,7 +37,7 @@ export default function VerifyPassword({ onVerify, onSuccess, onCancel }) {
               type={showPassword ? 'text' : 'password'}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="Password"
+              placeholder={t('verify.passwordPlaceholder')}
               autoComplete="current-password"
               autoFocus
               className="flex-1 bg-transparent text-slate-800 dark:text-slate-100 font-medium outline-none placeholder:text-slate-300 dark:placeholder:text-slate-600"
@@ -43,7 +45,7 @@ export default function VerifyPassword({ onVerify, onSuccess, onCancel }) {
             <button
               type="button"
               onClick={() => setShowPassword((v) => !v)}
-              aria-label={showPassword ? 'Hide password' : 'Show password'}
+              aria-label={showPassword ? t('common.hidePassword') : t('common.showPassword')}
               className="text-slate-400 dark:text-slate-500"
             >
               {showPassword ? <EyeOffIcon className="h-5 w-5" /> : <EyeIcon className="h-5 w-5" />}
@@ -58,13 +60,13 @@ export default function VerifyPassword({ onVerify, onSuccess, onCancel }) {
               onClick={onCancel}
               className="flex-1 rounded-2xl border border-white/60 dark:border-slate-700/60 bg-white/80 dark:bg-slate-800/80 py-3 text-sm font-semibold text-slate-600 dark:text-slate-300 transition-all duration-200 active:scale-95"
             >
-              Cancel
+              {t('verify.cancel')}
             </button>
             <button
               type="submit"
               className="flex-1 rounded-2xl bg-gradient-to-r from-indigo-600 to-blue-600 py-3 text-sm font-semibold text-white shadow-md shadow-indigo-500/20 transition-all duration-200 active:scale-95"
             >
-              Confirm
+              {t('verify.confirm')}
             </button>
           </div>
         </form>

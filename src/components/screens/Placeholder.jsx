@@ -1,11 +1,16 @@
-export default function Placeholder({ label, Icon, gradient, onBack }) {
+import { useTranslation } from '../../i18n/LanguageContext'
+
+export default function Placeholder({ labelKey, Icon, gradient, onBack }) {
+  const { t, isRtl } = useTranslation()
+  const label = t(labelKey)
+
   return (
     <div className="pb-4">
       <button
         onClick={onBack}
         className="mb-8 text-sm font-semibold text-indigo-600 dark:text-indigo-400 animate-fade-in-up"
       >
-        ← Back
+        {isRtl ? '→' : '←'} {t('common.back')}
       </button>
 
       <div className="flex flex-col items-center gap-4 pt-6 text-center animate-fade-in-up" style={{ animationDelay: '60ms' }}>
@@ -13,9 +18,7 @@ export default function Placeholder({ label, Icon, gradient, onBack }) {
           <Icon className="h-7 w-7" />
         </span>
         <h1 className="text-2xl font-bold text-slate-800 dark:text-white">{label}</h1>
-        <p className="max-w-xs text-slate-500 dark:text-slate-400">
-          {label} isn't wired up yet — this screen is a placeholder for what's coming next.
-        </p>
+        <p className="max-w-xs text-slate-500 dark:text-slate-400">{t('placeholder.notWired', { label })}</p>
       </div>
     </div>
   )

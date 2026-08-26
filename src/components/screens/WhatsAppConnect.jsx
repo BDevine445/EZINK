@@ -1,9 +1,10 @@
 import { DownloadIcon, LinkTapIcon, ChatIcon } from '../icons'
+import { useTranslation } from '../../i18n/LanguageContext'
 
 const STEPS = [
-  { Icon: DownloadIcon, gradient: 'from-blue-500 to-indigo-500', text: 'Download the EZINK App' },
-  { Icon: LinkTapIcon, gradient: 'from-cyan-500 to-teal-500', text: 'Tap "Link WhatsApp"' },
-  { Icon: ChatIcon, gradient: 'from-fuchsia-500 to-violet-500', text: 'Start Chatting with Our Bot!' },
+  { Icon: DownloadIcon, gradient: 'from-blue-500 to-indigo-500', key: 'step1' },
+  { Icon: LinkTapIcon, gradient: 'from-cyan-500 to-teal-500', key: 'step2' },
+  { Icon: ChatIcon, gradient: 'from-fuchsia-500 to-violet-500', key: 'step3' },
 ]
 
 // Twilio's shared WhatsApp Sandbox number — same for every account testing
@@ -14,17 +15,18 @@ const WHATSAPP_PREFILL = import.meta.env.VITE_WHATSAPP_JOIN_CODE || 'join tongue
 const WHATSAPP_LINK = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(WHATSAPP_PREFILL)}`
 
 export default function WhatsAppConnect() {
+  const { t } = useTranslation()
   return (
     <div className="pb-4">
-      <h1 className="text-3xl font-bold text-slate-800 dark:text-white mb-1 animate-fade-in-up">Connect to WhatsApp</h1>
+      <h1 className="text-3xl font-bold text-slate-800 dark:text-white mb-1 animate-fade-in-up">{t('whatsappConnect.title')}</h1>
       <p className="text-slate-500 dark:text-slate-400 mb-8 animate-fade-in-up" style={{ animationDelay: '60ms' }}>
-        Get started with the EZINK Bot
+        {t('whatsappConnect.subtitle')}
       </p>
 
       <div className="flex flex-col gap-3 mb-8">
-        {STEPS.map(({ Icon, gradient, text }, i) => (
+        {STEPS.map(({ Icon, gradient, key }, i) => (
           <div
-            key={text}
+            key={key}
             className="flex items-center gap-4 rounded-2xl border border-white/60 dark:border-slate-700/60 bg-white/80 dark:bg-slate-800/80 px-4 py-4 shadow-sm backdrop-blur-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md animate-fade-in-up"
             style={{ animationDelay: `${120 + i * 90}ms` }}
           >
@@ -33,7 +35,7 @@ export default function WhatsAppConnect() {
             </span>
             <span className="font-semibold text-slate-800 dark:text-slate-100">
               <span className="mr-1 text-slate-400 dark:text-slate-500">{i + 1}.</span>
-              {text}
+              {t(`whatsappConnect.${key}`)}
             </span>
           </div>
         ))}
@@ -46,7 +48,7 @@ export default function WhatsAppConnect() {
         className="block w-full rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-500 py-4 text-center font-semibold text-white shadow-lg shadow-teal-500/20 transition-all duration-300 hover:shadow-xl hover:shadow-teal-500/30 active:scale-[0.98] animate-fade-in-up"
         style={{ animationDelay: '420ms' }}
       >
-        Link WhatsApp
+        {t('whatsappConnect.link')}
       </a>
     </div>
   )

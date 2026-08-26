@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { PinIcon, HistoryIcon } from './icons'
+import { useTranslation } from '../i18n/LanguageContext'
 
 export default function VisaCard({
   label,
@@ -12,6 +13,7 @@ export default function VisaCard({
   onSendClick,
   delay = 0,
 }) {
+  const { t } = useTranslation()
   const [pinVisible, setPinVisible] = useState(false)
   const [numberVisible, setNumberVisible] = useState(false)
   const [balanceVisible, setBalanceVisible] = useState(false)
@@ -32,7 +34,7 @@ export default function VisaCard({
         </div>
         <button
           onClick={() => setNumberVisible((v) => !v)}
-          aria-label={numberVisible ? 'Hide card number' : 'Show card number'}
+          aria-label={numberVisible ? t('common.hideCardNumber') : t('common.showCardNumber')}
           className="relative block text-left text-xl tracking-[0.2em] font-medium mb-4"
         >
           {numberVisible ? number : maskedNumber}
@@ -40,7 +42,7 @@ export default function VisaCard({
         {balance && (
           <button
             onClick={() => setBalanceVisible((v) => !v)}
-            aria-label={balanceVisible ? 'Hide balance' : 'Show balance'}
+            aria-label={balanceVisible ? t('common.hideBalance') : t('common.showBalance')}
             className="relative block text-left text-2xl font-bold mb-4"
           >
             {balanceVisible ? balance : maskedBalance}
@@ -48,7 +50,7 @@ export default function VisaCard({
         )}
         <div className="relative flex items-end justify-between">
           <span className="text-xs uppercase tracking-wide text-white/80">
-            {pinVisible ? 'PIN 4471' : 'See PIN'}
+            {pinVisible ? t('cards.pin', { code: '4471' }) : t('cards.seePin')}
           </span>
           <span className="italic font-bold text-lg">VISA</span>
         </div>
@@ -59,7 +61,7 @@ export default function VisaCard({
           className="flex-1 flex items-center justify-center gap-2 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border border-white/60 dark:border-slate-700/60 rounded-2xl py-3 text-sm font-semibold text-slate-800 dark:text-slate-100 shadow-sm transition-all duration-200 hover:bg-white dark:hover:bg-slate-800 hover:shadow-md active:scale-95"
         >
           <PinIcon className="h-4 w-4" />
-          View PIN
+          {t('cards.viewPin')}
         </button>
         <button
           onClick={onSecondaryClick}
@@ -74,7 +76,7 @@ export default function VisaCard({
           onClick={onSendClick}
           className="mt-3 w-full rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-500 py-3 text-sm font-semibold text-white shadow-md shadow-teal-500/20 transition-all duration-200 hover:shadow-lg active:scale-[0.98]"
         >
-          Send Money
+          {t('cards.sendMoney')}
         </button>
       )}
     </div>

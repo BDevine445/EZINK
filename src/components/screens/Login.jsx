@@ -1,7 +1,9 @@
 import { useState } from 'react'
 import { EyeIcon, EyeOffIcon } from '../icons'
+import { useTranslation } from '../../i18n/LanguageContext'
 
 export default function Login({ rememberedEmail, onLogin }) {
+  const { t } = useTranslation()
   const [email, setEmail] = useState(rememberedEmail || '')
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
@@ -10,12 +12,12 @@ export default function Login({ rememberedEmail, onLogin }) {
   function handleSubmit(e) {
     e.preventDefault()
     if (!email.includes('@') || !password) {
-      setError('Enter a valid email and password')
+      setError(t('login.errorInvalid'))
       return
     }
     const result = onLogin(email.trim(), password)
     if (!result.ok) {
-      setError(result.error)
+      setError(t('login.errorCreds'))
       setPassword('')
     }
   }
@@ -28,11 +30,11 @@ export default function Login({ rememberedEmail, onLogin }) {
 
       <div className="relative z-10 flex h-full flex-col justify-center overflow-y-auto px-6 pt-[calc(env(safe-area-inset-top)+1.25rem)] pb-[calc(env(safe-area-inset-bottom)+1.25rem)]">
         <h1 className="text-3xl font-bold text-slate-800 dark:text-white mb-1 animate-fade-in-up">
-          {rememberedEmail ? 'Welcome back to ' : 'Welcome to '}
+          {rememberedEmail ? t('login.welcomeBack') : t('login.welcomeNew')}{' '}
           <span className="bg-gradient-to-r from-indigo-500 to-cyan-400 bg-clip-text text-transparent">EZINK</span>
         </h1>
         <p className="text-slate-500 dark:text-slate-400 mb-8 animate-fade-in-up" style={{ animationDelay: '60ms' }}>
-          {rememberedEmail ? 'Log in to continue' : 'Create a login to get started'}
+          {rememberedEmail ? t('login.subtitleBack') : t('login.subtitleNew')}
         </p>
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-3">
@@ -41,13 +43,13 @@ export default function Login({ rememberedEmail, onLogin }) {
             style={{ animationDelay: '120ms' }}
           >
             <label className="block text-xs font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-500 mb-1">
-              Email
+              {t('login.emailLabel')}
             </label>
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="you@example.com"
+              placeholder={t('login.emailPlaceholder')}
               autoComplete="email"
               className="w-full bg-transparent text-slate-800 dark:text-slate-100 font-medium outline-none placeholder:text-slate-300 dark:placeholder:text-slate-600"
             />
@@ -59,13 +61,13 @@ export default function Login({ rememberedEmail, onLogin }) {
           >
             <div className="flex-1">
               <label className="block text-xs font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-500 mb-1">
-                Password
+                {t('login.passwordLabel')}
               </label>
               <input
                 type={showPassword ? 'text' : 'password'}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="••••••••"
+                placeholder={t('login.passwordPlaceholder')}
                 autoComplete="current-password"
                 className="w-full bg-transparent text-slate-800 dark:text-slate-100 font-medium outline-none placeholder:text-slate-300 dark:placeholder:text-slate-600"
               />
@@ -73,7 +75,7 @@ export default function Login({ rememberedEmail, onLogin }) {
             <button
               type="button"
               onClick={() => setShowPassword((v) => !v)}
-              aria-label={showPassword ? 'Hide password' : 'Show password'}
+              aria-label={showPassword ? t('common.hidePassword') : t('common.showPassword')}
               className="text-slate-400 dark:text-slate-500"
             >
               {showPassword ? <EyeOffIcon className="h-5 w-5" /> : <EyeIcon className="h-5 w-5" />}
@@ -87,7 +89,7 @@ export default function Login({ rememberedEmail, onLogin }) {
             className="mt-2 w-full rounded-2xl bg-gradient-to-r from-indigo-600 to-blue-600 py-3.5 text-sm font-semibold text-white shadow-lg shadow-indigo-500/20 transition-all duration-200 hover:shadow-xl active:scale-[0.98] animate-fade-in-up"
             style={{ animationDelay: '240ms' }}
           >
-            {rememberedEmail ? 'Log in' : 'Create login'}
+            {rememberedEmail ? t('login.submitBack') : t('login.submitNew')}
           </button>
         </form>
       </div>

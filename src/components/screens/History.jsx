@@ -1,4 +1,5 @@
 import { ClockIcon } from '../icons'
+import { useTranslation } from '../../i18n/LanguageContext'
 
 const AVATAR_GRADIENTS = [
   'from-blue-500 to-indigo-500',
@@ -23,12 +24,13 @@ function RowSkeleton({ delay }) {
 }
 
 export default function History({ activeSubTab, onSubTabChange, onlinePurchases, whatsAppTransactions, loading, onSelectTransaction }) {
+  const { t } = useTranslation()
   const isOnline = activeSubTab === 'online'
   const items = isOnline ? onlinePurchases : whatsAppTransactions
 
   return (
     <div className="pb-4">
-      <h1 className="text-3xl font-bold text-slate-800 dark:text-white mb-5 animate-fade-in-up">Transaction History</h1>
+      <h1 className="text-3xl font-bold text-slate-800 dark:text-white mb-5 animate-fade-in-up">{t('history.title')}</h1>
 
       <div
         className="relative flex rounded-full bg-slate-100/80 dark:bg-slate-800/80 p-1 mb-5 backdrop-blur-sm animate-fade-in-up"
@@ -44,7 +46,7 @@ export default function History({ activeSubTab, onSubTabChange, onlinePurchases,
             isOnline ? 'text-white' : 'text-slate-500 dark:text-slate-400'
           }`}
         >
-          Online Purchases
+          {t('history.onlinePurchases')}
         </button>
         <button
           onClick={() => onSubTabChange('whatsapp')}
@@ -52,7 +54,7 @@ export default function History({ activeSubTab, onSubTabChange, onlinePurchases,
             !isOnline ? 'text-white' : 'text-slate-500 dark:text-slate-400'
           }`}
         >
-          WhatsApp History
+          {t('history.whatsappHistory')}
         </button>
       </div>
 
@@ -61,7 +63,7 @@ export default function History({ activeSubTab, onSubTabChange, onlinePurchases,
           <span className="flex h-12 w-12 items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800 text-slate-400 dark:text-slate-500">
             <ClockIcon className="h-6 w-6" />
           </span>
-          <p className="text-slate-400 dark:text-slate-500">No transactions yet.</p>
+          <p className="text-slate-400 dark:text-slate-500">{t('history.empty')}</p>
         </div>
       )}
 

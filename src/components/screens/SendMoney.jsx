@@ -1,6 +1,8 @@
 import { useState } from 'react'
+import { useTranslation } from '../../i18n/LanguageContext'
 
 export default function SendMoney({ balance, onBack, onSuccess }) {
+  const { t, isRtl } = useTranslation()
   const [amount, setAmount] = useState('')
   const [to, setTo] = useState('')
   const [error, setError] = useState(null)
@@ -12,7 +14,7 @@ export default function SendMoney({ balance, onBack, onSuccess }) {
 
     const parsed = Number(amount)
     if (!Number.isFinite(parsed) || parsed <= 0) {
-      setError('Enter a valid amount.')
+      setError(t('sendMoney.errorInvalidAmount'))
       return
     }
 
@@ -27,16 +29,14 @@ export default function SendMoney({ balance, onBack, onSuccess }) {
 
       if (!res.ok) {
         setError(
-          data.error === 'insufficient_funds'
-            ? "You don't have enough balance for that."
-            : 'Something went wrong. Try again.'
+          data.error === 'insufficient_funds' ? t('sendMoney.errorInsufficientFunds') : t('sendMoney.errorGeneric')
         )
         return
       }
 
       onSuccess()
     } catch {
-      setError("Couldn't reach the server. Check your connection and try again.")
+      setError(t('sendMoney.errorNetwork'))
     } finally {
       setSubmitting(false)
     }
@@ -48,19 +48,19 @@ export default function SendMoney({ balance, onBack, onSuccess }) {
         onClick={onBack}
         className="mb-8 text-sm font-semibold text-indigo-600 dark:text-indigo-400 animate-fade-in-up"
       >
-        ← Back
+        {isRtl ? '→' : '←'} {t('common.back')}
       </button>
 
       <h1 className="text-3xl font-bold text-slate-800 dark:text-white mb-1 animate-fade-in-up" style={{ animationDelay: '40ms' }}>
-        Send Money
+        {t('sendMoney.title')}
       </h1>
       <p className="text-slate-500 dark:text-slate-400 mb-8 animate-fade-in-up" style={{ animationDelay: '80ms' }}>
-        Available balance: {balance}
+        {t('sendMoney.availableBalance', { balance })}
       </p>
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-4 animate-fade-in-up" style={{ animationDelay: '120ms' }}>
         <label className="flex flex-col gap-1.5">
-          <span className="text-sm font-semibold text-slate-600 dark:text-slate-300">Amount (Le)</span>
+          <span className="text-sm font-semibold text-slate-600 dark:text-slate-300">{t('sendMoney.amountLabel')}</span>
           <input
             type="number"
             inputMode="decimal"
@@ -68,18 +68,18 @@ export default function SendMoney({ balance, onBack, onSuccess }) {
             step="0.01"
             value={amount}
             onChange={(e) => setAmount(e.target.value)}
-            placeholder="0.00"
+            placeholder={t('sendMoney.amountPlaceholder')}
             className="rounded-2xl border border-white/60 dark:border-slate-700/60 bg-white/80 dark:bg-slate-800/80 px-4 py-3 text-lg font-semibold text-slate-800 dark:text-slate-100 shadow-sm backdrop-blur-sm outline-none focus:ring-2 focus:ring-indigo-500"
           />
         </label>
 
         <label className="flex flex-col gap-1.5">
-          <span className="text-sm font-semibold text-slate-600 dark:text-slate-300">To (optional)</span>
+          <span className="text-sm font-semibold text-slate-600 dark:text-slate-300">{t('sendMoney.toLabel')}</span>
           <input
             type="text"
             value={to}
             onChange={(e) => setTo(e.target.value)}
-            placeholder="Recipient's name"
+            placeholder={t('sendMoney.toPlaceholder')}
             className="rounded-2xl border border-white/60 dark:border-slate-700/60 bg-white/80 dark:bg-slate-800/80 px-4 py-3 font-medium text-slate-800 dark:text-slate-100 shadow-sm backdrop-blur-sm outline-none focus:ring-2 focus:ring-indigo-500"
           />
         </label>
@@ -91,7 +91,7 @@ export default function SendMoney({ balance, onBack, onSuccess }) {
           disabled={submitting}
           className="mt-2 w-full rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-500 py-4 font-semibold text-white shadow-lg shadow-teal-500/20 transition-all duration-300 hover:shadow-xl active:scale-[0.98] disabled:opacity-60"
         >
-          {submitting ? 'Sending…' : 'Send'}
+          {submitting ? t('sendMoney.sending') : t('sendMoney.send')}
         </button>
       </form>
     </div>

@@ -1,7 +1,9 @@
 import { useState } from 'react'
 import { EyeIcon, EyeOffIcon, LockIcon } from '../icons'
+import { useTranslation } from '../../i18n/LanguageContext'
 
 export default function QuickUnlock({ rememberedEmail, onUnlock }) {
+  const { t } = useTranslation()
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState('')
@@ -10,7 +12,7 @@ export default function QuickUnlock({ rememberedEmail, onUnlock }) {
     e.preventDefault()
     const result = onUnlock(password)
     if (!result.ok) {
-      setError(result.error)
+      setError(t('quickUnlock.error'))
       setPassword('')
     }
   }
@@ -26,8 +28,8 @@ export default function QuickUnlock({ rememberedEmail, onUnlock }) {
         </span>
 
         <div className="animate-fade-in-up" style={{ animationDelay: '60ms' }}>
-          <h1 className="text-2xl font-bold text-slate-800 dark:text-white mb-1">Welcome back</h1>
-          <p className="text-slate-500 dark:text-slate-400">Signed in as {rememberedEmail}</p>
+          <h1 className="text-2xl font-bold text-slate-800 dark:text-white mb-1">{t('quickUnlock.title')}</h1>
+          <p className="text-slate-500 dark:text-slate-400">{t('quickUnlock.signedInAs', { email: rememberedEmail })}</p>
         </div>
 
         <form onSubmit={handleSubmit} className="w-full max-w-xs flex flex-col gap-3">
@@ -39,7 +41,7 @@ export default function QuickUnlock({ rememberedEmail, onUnlock }) {
               type={showPassword ? 'text' : 'password'}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="Password"
+              placeholder={t('quickUnlock.passwordPlaceholder')}
               autoComplete="current-password"
               autoFocus
               className="flex-1 bg-transparent text-slate-800 dark:text-slate-100 font-medium outline-none placeholder:text-slate-300 dark:placeholder:text-slate-600"
@@ -47,7 +49,7 @@ export default function QuickUnlock({ rememberedEmail, onUnlock }) {
             <button
               type="button"
               onClick={() => setShowPassword((v) => !v)}
-              aria-label={showPassword ? 'Hide password' : 'Show password'}
+              aria-label={showPassword ? t('common.hidePassword') : t('common.showPassword')}
               className="text-slate-400 dark:text-slate-500"
             >
               {showPassword ? <EyeOffIcon className="h-5 w-5" /> : <EyeIcon className="h-5 w-5" />}
@@ -61,7 +63,7 @@ export default function QuickUnlock({ rememberedEmail, onUnlock }) {
             className="w-full rounded-2xl bg-gradient-to-r from-indigo-600 to-blue-600 py-3.5 text-sm font-semibold text-white shadow-lg shadow-indigo-500/20 transition-all duration-200 hover:shadow-xl active:scale-[0.98] animate-fade-in-up"
             style={{ animationDelay: '180ms' }}
           >
-            Unlock
+            {t('quickUnlock.unlock')}
           </button>
         </form>
       </div>

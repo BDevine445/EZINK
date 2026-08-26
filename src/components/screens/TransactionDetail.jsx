@@ -1,4 +1,7 @@
+import { useTranslation } from '../../i18n/LanguageContext'
+
 export default function TransactionDetail({ transaction, onBack }) {
+  const { t, isRtl } = useTranslation()
   if (!transaction) return null
   const { name, amount, date } = transaction
 
@@ -8,7 +11,7 @@ export default function TransactionDetail({ transaction, onBack }) {
         onClick={onBack}
         className="mb-8 text-sm font-semibold text-indigo-600 dark:text-indigo-400 animate-fade-in-up"
       >
-        ← Back
+        {isRtl ? '→' : '←'} {t('common.back')}
       </button>
 
       <div className="flex flex-col items-center gap-4 pt-6 text-center animate-fade-in-up" style={{ animationDelay: '60ms' }}>
@@ -21,12 +24,12 @@ export default function TransactionDetail({ transaction, onBack }) {
 
       <div className="mt-8 flex flex-col gap-3 animate-fade-in-up" style={{ animationDelay: '120ms' }}>
         <div className="flex items-center justify-between rounded-2xl border border-white/60 dark:border-slate-700/60 bg-white/80 dark:bg-slate-800/80 px-4 py-4 shadow-sm backdrop-blur-sm">
-          <span className="text-sm text-slate-500 dark:text-slate-400">Date</span>
+          <span className="text-sm text-slate-500 dark:text-slate-400">{t('transactionDetail.date')}</span>
           <span className="font-semibold text-slate-800 dark:text-slate-100">{date}</span>
         </div>
         <div className="flex items-center justify-between rounded-2xl border border-white/60 dark:border-slate-700/60 bg-white/80 dark:bg-slate-800/80 px-4 py-4 shadow-sm backdrop-blur-sm">
-          <span className="text-sm text-slate-500 dark:text-slate-400">Status</span>
-          <span className="font-semibold text-emerald-600 dark:text-emerald-400">Completed</span>
+          <span className="text-sm text-slate-500 dark:text-slate-400">{t('transactionDetail.status')}</span>
+          <span className="font-semibold text-emerald-600 dark:text-emerald-400">{t('transactionDetail.completed')}</span>
         </div>
       </div>
     </div>

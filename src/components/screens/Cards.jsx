@@ -1,5 +1,6 @@
 import VisaCard from '../VisaCard'
 import { HistoryIcon, ChatIcon } from '../icons'
+import { useTranslation } from '../../i18n/LanguageContext'
 
 function CardSkeleton({ delay }) {
   return (
@@ -14,9 +15,10 @@ function CardSkeleton({ delay }) {
 }
 
 export default function Cards({ onNavigate, onlineCard, sendMoneyCard, loading }) {
+  const { t } = useTranslation()
   return (
     <div className="pb-4">
-      <h1 className="text-3xl font-bold text-slate-800 dark:text-white mb-6 animate-fade-in-up">Your EZINK Visa Cards</h1>
+      <h1 className="text-3xl font-bold text-slate-800 dark:text-white mb-6 animate-fade-in-up">{t('cards.title')}</h1>
 
       {loading && (
         <>
@@ -32,7 +34,7 @@ export default function Cards({ onNavigate, onlineCard, sendMoneyCard, loading }
             number={onlineCard.number}
             balance={onlineCard.balance}
             gradientClass="from-blue-500 via-indigo-500 to-cyan-500"
-            secondaryLabel="Online Transactions"
+            secondaryLabel={t('cards.onlineTransactions')}
             secondaryIcon={HistoryIcon}
             onSecondaryClick={() => onNavigate('history', 'online')}
             delay={80}
@@ -43,7 +45,7 @@ export default function Cards({ onNavigate, onlineCard, sendMoneyCard, loading }
             number={sendMoneyCard.number}
             balance={sendMoneyCard.balance}
             gradientClass="from-fuchsia-500 via-violet-500 to-indigo-600"
-            secondaryLabel="WhatsApp Transactions"
+            secondaryLabel={t('cards.whatsappTransactions')}
             secondaryIcon={ChatIcon}
             onSecondaryClick={() => onNavigate('history', 'whatsapp')}
             onSendClick={() => onNavigate('send')}
