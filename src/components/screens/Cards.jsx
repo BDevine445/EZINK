@@ -47,7 +47,7 @@ export default function Cards({ onNavigate, onlineCard, sendMoneyCard, loading }
             gradientClass="from-fuchsia-500 via-violet-500 to-indigo-600"
             secondaryLabel={t('cards.whatsappTransactions')}
             secondaryIcon={ChatIcon}
-            onSecondaryClick={() => onNavigate('history', 'whatsapp')}
+            onSecondaryClick={() => onNavigate('history', 'all')}
             onSendClick={() => onNavigate('send')}
             delay={160}
           />
