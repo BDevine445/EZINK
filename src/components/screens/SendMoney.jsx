@@ -20,10 +20,10 @@ export default function SendMoney({ balance, onBack, onSuccess }) {
 
     setSubmitting(true)
     try {
-      const res = await fetch('/api/send', {
+      const res = await fetch('/api/transaction', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ amount: parsed, to: to.trim() || undefined }),
+        body: JSON.stringify({ type: 'send', amount: parsed, counterparty: to.trim() || undefined }),
       })
       const data = await res.json()
 
